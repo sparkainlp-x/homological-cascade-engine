@@ -16,6 +16,30 @@ A small Python toolkit for numerical homological cascade experiments and robust 
 
 The chain coefficients are real-valued numerical null-space vectors, not integer incidence matrices for a particular geometric complex. This package is intended as an experimental numerical implementation rather than a claim about physical or causal phenomena.
 
+## Deep mechanics utilities
+
+`src.deep_mechanics.HigherDimensionalLaplacian` accepts adjacent real boundary maps `d_k` and `d_(k+1)`, checks their chain condition, and constructs `L_k = d_k.T @ d_k + d_(k+1) @ d_(k+1).T`. It provides numerical Betti-number and spectral-gap estimates plus exact/co-exact/harmonic projections. Its tolerances are numerical cutoffs; they do not establish an exact topological model for measured data.
+
+`src.deep_mechanics.NonStationaryPOTEstimator` tracks a recency-weighted baseline quantile and fits a Generalized Pareto tail on a bounded window. It excludes flagged observations from updates and computes horizon-adjusted, model-based upper bounds. These bounds depend on a locally stable tail model and are not calibrated false-positive guarantees. Validate the fit and thresholds against the intended data before operational use.
+
+```python
+import numpy as np
+
+from src.deep_mechanics import HigherDimensionalLaplacian, NonStationaryPOTEstimator
+
+# A small chain complex: d_1 @ d_2 = 0.
+d1 = np.array([[1.0, -1.0, 0.0]])
+d2 = np.array([[0.0], [0.0], [1.0]])
+topology = HigherDimensionalLaplacian(d1, d2)
+print(topology.compute_betti_number(), topology.compute_spectral_gap())
+
+# Calibrate a streaming upper-tail model from baseline scores.
+calibration = np.random.default_rng(10).standard_t(df=5, size=2_000)
+tail = NonStationaryPOTEstimator(risk_level=1e-3)
+tail.fit_initial_window(calibration)
+is_anomaly, threshold_used = tail.update_dynamic_threshold(8.0)
+```
+
 ## Install
 
 ```bash
