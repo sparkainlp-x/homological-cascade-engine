@@ -13,8 +13,11 @@ A small Python toolkit for numerical homological cascade experiments and robust 
 - **Observer manifestation:** selects high-energy entries by quantile and returns both a binary mask and masked values.
 - **Robust telemetry detector:** estimates location and scale with the median and MAD, applies a Huber-loss score, ignores masked/non-finite observations, and optionally retains only Top-K candidates per feature sub-block.
 - **POT thresholding:** fits a Generalized Pareto Distribution (GPD) to upper-tail excesses and updates the model from accepted streaming observations without feeding detected anomalies into calibration history.
+- **Experimental topological optics filter:** calibrates multichannel telemetry, applies matrix-exponential 1-Laplacian diffusion, and scores coexact energy with an adaptive POT threshold. Import `TopologicalAdaptiveOpticsFilter` from `src.quantum.topological_ao`.
 
 The chain coefficients are real-valued numerical null-space vectors, not integer incidence matrices for a particular geometric complex. This package is intended as an experimental numerical implementation rather than a claim about physical or causal phenomena.
+
+The optics/QKD module is likewise a numerical research prototype. Its threshold exceedances are not validated eavesdropping detections and do not establish QKD security, secret-key rates, or sub-microsecond performance. Do not use it as a production security control without independent physical modeling, instrument validation, and protocol-level security analysis.
 
 ## Install
 
