@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "Homological Cascade Engine"
+version: 0.6.0
+date-released: 2026-10-09
+license: MIT
+type: software
+authors:
+  - name: "Spark AI NLP"
+repository-code: "https://github.com/sparkainlp-x/homological-cascade-engine"
