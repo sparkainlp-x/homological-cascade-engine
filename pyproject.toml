@@ -32,7 +32,7 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = ["src"]
+packages = ["src", "src.deep_mechanics"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
