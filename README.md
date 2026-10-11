@@ -4,17 +4,25 @@
 [![Coverage](https://codecov.io/gh/sparkainlp-x/homological-cascade-engine/branch/main/graph/badge.svg)](https://codecov.io/gh/sparkainlp-x/homological-cascade-engine)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A small Python toolkit for numerical homological cascade experiments and robust telemetry anomaly detection. Version **0.6.0** combines a boundary-constrained 2-complex model, matrix-exponential diffusion, MAD-scaled telemetry scoring, and Peak-Over-Threshold (POT) tail thresholds.
+### Project status
 
-## Components
+The Homological Cascade Engine is an experimental Python framework for exploring topological signal representations and robust anomaly scoring in multichannel telemetry. The repository contains prototype implementations for homological-cascade processing, MAD-based telemetry scoring, and Peaks-Over-Threshold (POT) thresholding, along with tests for selected software behaviors.
 
-- **Homological membrane chain:** constructs boundary matrices `d1` and `d2` with `d1 @ d2 ≈ 0` (to floating-point precision).
-- **Cascade diffusion:** forms the combinatorial 1-Laplacian `L1 = d1.T @ d1 + d2 @ d2.T` and propagates a state using `exp(-J L1 t)`, avoiding explicit-Euler instability.
-- **Observer manifestation:** selects high-energy entries by quantile and returns both a binary mask and masked values.
-- **Robust telemetry detector:** estimates location and scale with the median and MAD, applies a Huber-loss score, ignores masked/non-finite observations, and optionally retains only Top-K candidates per feature sub-block.
-- **POT thresholding:** fits a Generalized Pareto Distribution (GPD) to upper-tail excesses and updates the model from accepted streaming observations without feeding detected anomalies into calibration history.
+### Evidence and limitations
 
-The chain coefficients are real-valued numerical null-space vectors, not integer incidence matrices for a particular geometric complex. This package is intended as an experimental numerical implementation rather than a claim about physical or causal phenomena.
+The current code and tests do not establish reliable false-alarm control under non-stationary drift, superiority to established baselines, or suitability for operational deployment. Synthetic tests demonstrate software behavior on the tested cases; they do not establish performance on real telemetry or real-world attacks.
+
+Tokamak plasma triage, battery dendrite detection, and QKD attack detection are potential research directions—not validated capabilities of this repository. Claims about detection performance, false-alarm rates, or warning lead times in those domains require separate, domain-specific evaluation.
+
+### Validation roadmap
+
+The next step is a reproducible evaluation on public, labelled telemetry using a protocol fixed before testing. Report alarm burden, event-level recall, detection delay, calibration stability, comparisons with relevant baselines, and uncertainty. Keep training, calibration, and test periods separate; do not tune thresholds on the test period.
+
+Hardware, security, and domain-specific claims require their own tests. Label results clearly as SYNTHETIC, REPORTED, TARGET, or UNRUN, as appropriate.
+
+### Contribution invitation
+
+Researchers and engineers are invited to inspect the implementation, reproduce the tests, and help evaluate the framework on appropriate datasets. Please treat results as exploratory until independently validated.
 
 ## Deep mechanics utilities
 
