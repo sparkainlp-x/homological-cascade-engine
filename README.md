@@ -2,6 +2,7 @@
 
 [![CI Suite](https://github.com/sparkainlp-x/homological-cascade-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/sparkainlp-x/homological-cascade-engine/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/sparkainlp-x/homological-cascade-engine/branch/main/graph/badge.svg)](https://codecov.io/gh/sparkainlp-x/homological-cascade-engine)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23307846.svg)](https://doi.org/10.5281/zenodo.23307846)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ### Project status
@@ -131,6 +132,10 @@ print(pot.threshold, anomalies)
 ```
 
 A mask uses `True` for an observed value. Non-finite or masked samples are excluded from model fitting and never returned as anomalies. The first call to `POTThreshold.update` bootstraps from its input and returns an all-false mask; use `fit` explicitly when a separate calibration set is available.
+
+## Cite
+
+Concept DOI (all versions): [10.5281/zenodo.23307846](https://doi.org/10.5281/zenodo.23307846). v0.6.0: [10.5281/zenodo.23307847](https://doi.org/10.5281/zenodo.23307847). See [CITATION.cff](CITATION.cff).
 
 ## CI and license
 
