@@ -1,0 +1,40 @@
+{
+  "upload_type": "software",
+  "title": "Homological Cascade Engine: chain-complex diffusion, Hodge residual scoring, and streaming POT thresholds (research prototype)",
+  "version": "0.6.0",
+  "description": "<p>Experimental Python research software for exploring topological signal representations and robust anomaly scoring on multichannel telemetry. It provides a real-valued 2-complex with d1 d2 = 0, matrix-exponential diffusion over the 1-Laplacian, a Hodge decomposition (exact, co-exact, harmonic), median/MAD telemetry scoring, and static and non-stationary Peaks-Over-Threshold (Generalized Pareto) thresholds.</p><p>v0.6.0 adds a classical, synthetic residual-energy scorer (src.quantum.topological_ao) and a robust per-channel calibrator (src.analog_calibration). The scorer centres and scales frames, removes the common-mode offset, applies a contractive diffusion operator, and flags frames whose co-exact energy exceeds a streaming POT bound. Its names are motivated by free-space QKD and adaptive-optics background, but it runs only on synthetic real-valued vectors: it is not a QKD system, not adaptive-optics hardware, gives no quantum-security guarantee, does not detect real eavesdroppers, and has no measured latency. A flag means only that a frame's residual energy is unusually large relative to calibration data.</p><p>All results are SYNTHETIC (generated test inputs). No evaluation on real telemetry has been performed. Python 3.10+, NumPy and SciPy. Tests run in CI with a 90% coverage gate. License: MIT.</p>",
+  "creators": [
+    {
+      "name": "Brisson, Jean-François",
+      "affiliation": "Spark AI NLP, Fredericton, New Brunswick, Canada",
+      "orcid": "0009-0000-9778-5374"
+    }
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "language": "eng",
+  "keywords": [
+    "research software",
+    "chain complex",
+    "Hodge decomposition",
+    "graph Laplacian",
+    "anomaly detection",
+    "extreme value theory",
+    "peaks over threshold",
+    "telemetry",
+    "synthetic data",
+    "New Brunswick"
+  ],
+  "communities": [
+    {
+      "identifier": "spark-ai-nlp"
+    }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/sparkainlp-x/homological-cascade-engine",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

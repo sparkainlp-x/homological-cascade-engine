@@ -48,6 +48,42 @@ tail.fit_initial_window(calibration)
 is_anomaly, threshold_used = tail.update_dynamic_threshold(8.0)
 ```
 
+## Synthetic residual-energy scorer (v0.6.0)
+
+> **Scope:** classical, SYNTHETIC signal processing on real-valued vectors. This is **not** a quantum key distribution (QKD) system and **not** adaptive-optics hardware. It processes no photons or quantum states, gives **no quantum-security guarantee**, does **not** detect real eavesdroppers, and has **no measured latency**.
+
+*Background (motivation only):* free-space QKD links are disturbed by atmospheric turbulence, and mechanical adaptive optics typically corrects at about kHz bandwidths while QKD clocks run far faster. That gap motivated a toy question: can a software-only residual score separate slow common drift from a sharp localized offset in synthetic frames? The class and method names below come from the project specification and are labels only.
+
+`src.quantum.TopologicalAdaptiveOpticsFilter` does five plain steps per frame:
+
+1. Centre and scale each channel with median/MAD statistics from a calibration block (`src.analog_calibration.AnalogSoundCalibrator`).
+2. Subtract the frame mean ("piston"). Without this, slow drift common to all channels leaks into the score, because the random boundary map does not annihilate the all-ones vector.
+3. Apply `U = expm(-J * L1 * dt)` (default `J = 1.2`, `dt = 0.02`). `L1` is positive semi-definite, so `U` is a symmetric contraction that leaves harmonic components unchanged.
+4. Score the squared norm of the co-exact Hodge component.
+5. Flag the frame if the score exceeds a streaming Generalized Pareto POT bound (`risk_level = 1e-4`). This is a model-based target, not a calibrated false-alarm guarantee.
+
+A flag means only "residual energy is unusually large relative to calibration". Any large enough disturbance with a co-exact component is flagged, whatever its cause.
+
+```python
+import numpy as np
+
+from src.quantum import TopologicalAdaptiveOpticsFilter
+
+rng = np.random.default_rng(42)
+time = np.linspace(0, 5, 500)
+frames = 2.0 * np.sin(0.4 * time)[:, None] + rng.normal(0, 0.5, size=(500, 256))
+
+scorer = TopologicalAdaptiveOpticsFilter(n_subapertures=256)
+scorer.calibrate_ambient_sky(frames[:200])
+flags = [scorer.process_photon_frame(f)[0] for f in frames[200:400]]
+
+offset = frames[450].copy()
+offset[50:100] += 18.0  # synthetic localized offset (stand-in for a tamper scenario)
+flagged, reconstructed, energy = scorer.process_photon_frame(offset)
+```
+
+SYNTHETIC result from `tests/test_topological_ao.py` (seed 42): 0 flags on frames 200–399 of the drifting stream, and the localized offset scored about 158.5 against a bound of about 2.7. With `remove_piston=False`, the same stream gave 4 false flags. The specification's check that `var(reconstructed) <= var(raw frame)` does not hold, because calibration rescales the frame. The test checks it against the conditioned frame instead. See [CHANGELOG.md](CHANGELOG.md).
+
 ## Install
 
 ```bash

@@ -166,13 +166,26 @@ class HigherDimensionalLaplacian:
         if not np.all(np.isfinite(vector)):
             raise ValueError("chain_vector must contain only finite values")
 
+        exact_basis, coexact_basis, harmonic_basis = self._projection_bases(tolerance)
+        exact = exact_basis @ (exact_basis.T @ vector)
+        coexact = coexact_basis @ (coexact_basis.T @ vector)
+        harmonic = harmonic_basis @ (harmonic_basis.T @ vector)
+        return exact, coexact, harmonic
+
+    def _projection_bases(
+        self, tolerance: float
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Return cached orthonormal bases for the exact, co-exact, and harmonic spaces.
+
+        The operator arrays are read-only, so the bases depend only on
+        ``tolerance``. Caching avoids repeating the eigen- and singular-value
+        decompositions when many vectors are decomposed with the same operator.
+        """
+        cache = self.__dict__.setdefault("_basis_cache", {})
+        if tolerance in cache:
+            return cache[tolerance]
         eigenvalues, eigenvectors = np.linalg.eigh(self.L_k)
         harmonic_basis = eigenvectors[:, np.abs(eigenvalues) <= tolerance]
-        harmonic = (
-            harmonic_basis @ (harmonic_basis.T @ vector)
-            if harmonic_basis.shape[1]
-            else np.zeros_like(vector)
-        )
 
         # Restrict boundary ranges to the orthogonal complement of the chosen
         # numerical kernel; otherwise a user-supplied zero_tol can double-count
@@ -193,9 +206,10 @@ class HigherDimensionalLaplacian:
         coexact_basis = _orthonormal_basis(
             coexact_range, reference_scale=boundary_scale
         )
-        exact = exact_basis @ (exact_basis.T @ vector)
-        coexact = coexact_basis @ (coexact_basis.T @ vector)
-        return exact, coexact, harmonic
+        for basis in (exact_basis, coexact_basis, harmonic_basis):
+            basis.setflags(write=False)
+        cache[tolerance] = (exact_basis, coexact_basis, harmonic_basis)
+        return cache[tolerance]
 
     def verify_boundary_orthogonality(
         self, chain_vector: np.ndarray, zero_tol: float = 1e-8, atol: float = 1e-8

@@ -1,10 +1,28 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata in this file."
 title: "Homological Cascade Engine"
-version: 0.6.0
-date-released: 2026-10-09
-license: MIT
 type: software
 authors:
-  - name: "Spark AI NLP"
+  - family-names: Brisson
+    given-names: Jean-François
+    affiliation: "Spark AI NLP, Fredericton, New Brunswick, Canada"
+    orcid: "https://orcid.org/0009-0000-9778-5374"
 repository-code: "https://github.com/sparkainlp-x/homological-cascade-engine"
+url: "https://sparkainlpx.xyz"
+abstract: >-
+  Experimental research software for chain-complex diffusion, Hodge
+  decomposition, robust MAD telemetry scoring, and streaming
+  Peaks-Over-Threshold thresholds. v0.6.0 adds a classical, synthetic
+  co-exact residual-energy scorer with QKD-motivated names; it is not a QKD
+  system or adaptive-optics hardware, gives no security guarantee, and does
+  not detect real eavesdroppers. All reported results are synthetic.
+keywords:
+  - research software
+  - chain complex
+  - Hodge decomposition
+  - anomaly detection
+  - extreme value theory
+  - synthetic data
+license: MIT
+version: "0.6.0"
+date-released: "2026-10-11"
